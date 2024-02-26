@@ -29,20 +29,20 @@ start_time=$SECONDS
 
 cd /home/pthibodeaux/dmatter/dsphsim/astr34000_stats/
 
-inst=IMACS
+inst=DEIMOS
 tottime=43200
-nframe=100
+nframe=40
 ii=$SLURM_ARRAY_TASK_ID
 
 source ~/.bashrc
 start
 
 
-for k in {1..10}
+for k in {1..6}
 
 do
 
-    for n in 1.0  #0.0 0.5 1.0 1.5
+    for n in 2.0  #0.0 0.5 1.0 1.5
     do
         module unload python
         echo vsys $n iteration $ii
@@ -51,11 +51,12 @@ do
         obstime=$(($tottime/$k))
 
         module load python/anaconda-2020.02
-        python ../dsphsim/simulator.py --stellar_mass 320000 --rhalf .196 --vmax 18.197 --rvmax 0.759 --distance 76 --kinematics Physical --vsys $n temp'_'$ii.txt --instrument $inst --obstime $obstime
+
+        python ../dsphsim/simulator.py --stellar_mass 2000 --rhalf .03 --vmax 10.4 --rvmax 0.76 --distance 23 --kinematics Physical --vsys $n temp'_'$ii.txt --instrument $inst --obstime $obstime
         #module unload python
         #module load python/anaconda-2021.05
         #python fit_draco_test.py $i temp.txt dracotest_$n'_'$inst.txt
-        python fit_vdisp.py temp_$ii.txt dracotest/dracotest_$n'_'$inst'_'$k''s.txt $nstar $obstime
+        python fit_vdisp.py temp_$ii.txt seguetest/seguetest_$n'_'$inst'_'$k.txt $nstar $obstime
     done
 done
 
